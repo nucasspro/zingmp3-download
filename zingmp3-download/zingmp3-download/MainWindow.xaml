@@ -1,18 +1,17 @@
-﻿<Window x:Class="zingmp3_download.MainWindow"
+﻿<Window x:Name="window" x:Class="zingmp3_download.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:zingmp3_download"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" WindowStartupLocation="CenterScreen">
-    <StackPanel>
-        <TextBlock Text="Zing Mp3 Download" HorizontalAlignment="Center" Padding="15" FontSize="20"></TextBlock>
-        <Image Height="150" Source="icons8-Download-96.ico"></Image>
-        <DockPanel>
-            <Label Content="Input Link" Margin="5,15,0,5" DockPanel.Dock="Left"></Label>
-            <TextBox x:Name="tbxInputLink" Margin="5,15,5,5" DockPanel.Dock="Right"></TextBox>
-        </DockPanel>
-        <Button x:Name="btnDownload" Click="btnDownload_Click" Content="Download" Width="170" Height="25" />
-    </StackPanel>
+        Title="Zing Downloader" Height="111.5" Width="542" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Storyboard x:Key="Storyboard1"/>
+    </Window.Resources>
+    <Grid>
+        <Label Content="Input link" HorizontalAlignment="Left" Margin="7,14,0,0" VerticalAlignment="Top"/>
+        <TextBox MouseDoubleClick="tbxInputLink_MouseDoubleClick" x:Name="tbxInputLink" Height="23" Margin="76,14,15,0" TextWrapping="Wrap" Text="http://mp3.zing.vn/bai-hat/Co-Em-Cho-Min-MrA/ZW7FODC9.html" VerticalAlignment="Top"/>
+        <Button x:Name="btnDownload" Click="btnDownload_Click" Content="Download" HorizontalAlignment="Left" Margin="223,49,0,0" VerticalAlignment="Top" Width="75"/>
+    </Grid>
 </Window>

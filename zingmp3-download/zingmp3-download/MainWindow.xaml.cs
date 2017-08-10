@@ -5,7 +5,6 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Forms;
 using xNet;
 
 namespace zingmp3_download
@@ -19,8 +18,6 @@ namespace zingmp3_download
         public bool UseShellExecute { get; private set; }
         public bool CreateNoWindow { get; private set; }
 
-        public NotifyIcon notifi = new NotifyIcon();
-
         public MainWindow()
         {
             InitializeComponent();
@@ -30,18 +27,20 @@ namespace zingmp3_download
 
         private void btnDownload_Click(object sender, RoutedEventArgs e)
         {
-            notifi.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetEntryAssembly().ManifestModule.Name);
-            notifi.Visible = true;
+            if (tbxInputLink.Text == "")
+            {
+                MessageBox.Show("Ban can nhap link muon tai ");
+            }
             string inputLink = tbxInputLink.Text;
-
-            DownloadMp3(inputLink);
+            bool checkidm = CheckIDM();
+            DownloadMp3(inputLink, checkidm);
         }
 
         #endregion Event
 
         #region Method
 
-        private void DownloadMp3(string inputLink)
+        private void DownloadMp3(string inputLink, bool checkidm)
         {
             HttpRequest http = new HttpRequest();
             string htmlSong = http.Get(inputLink).ToString();
@@ -59,16 +58,22 @@ namespace zingmp3_download
 
             full_name = RemoveUnicode(full_name).Replace(" ", "-");
 
-            if (CheckIDM() == true)
+            try
             {
-                DownloadFromIDM(downloadURL, full_name);
-                Notification("Download thành công!");
+                if (checkidm == true)
+                {
+                    DownloadFromIDM(downloadURL, full_name);
+                }
+                else
+                {
+                    WebClient wc = new WebClient();
+                    wc.DownloadFile(downloadURL, AppDomain.CurrentDomain.BaseDirectory + full_name);
+                    MessageBox.Show("Download thanh cong!");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                WebClient wc = new WebClient();
-                wc.DownloadFile(downloadURL, AppDomain.CurrentDomain.BaseDirectory + full_name);
-                Notification("Download thành công!");
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -108,12 +113,11 @@ namespace zingmp3_download
             return text;
         }
 
-        private void Notification(string message)
-        {
-            notifi.BalloonTipText = message;
-            notifi.ShowBalloonTip(1000);
-        }
-
         #endregion Method
+
+        private void tbxInputLink_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            tbxInputLink.Text = "";
+        }
     }
 }

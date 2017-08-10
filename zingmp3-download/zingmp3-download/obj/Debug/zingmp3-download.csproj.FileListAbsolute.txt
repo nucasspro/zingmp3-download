@@ -1,7 +1,9 @@
 D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\bin\Debug\zingmp3-download.exe.config
 D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\bin\Debug\zingmp3-download.exe
 D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\bin\Debug\zingmp3-download.pdb
+D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\bin\Debug\Newtonsoft.Json.dll
 D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\bin\Debug\xNet.dll
+D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\bin\Debug\Newtonsoft.Json.xml
 D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\obj\Debug\MainWindow.g.cs
 D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\obj\Debug\App.g.cs
 D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\obj\Debug\zingmp3-download_MarkupCompile.cache
@@ -12,6 +14,4 @@ D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\obj\Debug\zingmp3_downl
 D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\obj\Debug\zingmp3-download.csproj.GenerateResource.Cache
 D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\obj\Debug\zingmp3-download.exe
 D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\obj\Debug\zingmp3-download.pdb
-D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\bin\Debug\Newtonsoft.Json.dll
-D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\bin\Debug\Newtonsoft.Json.xml
 D:\C#\zingmp3-download\zingmp3-download\zingmp3-download\obj\Debug\zingmp3-download.csprojResolveAssemblyReference.cache
