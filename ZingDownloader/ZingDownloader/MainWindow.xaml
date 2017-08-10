@@ -1,0 +1,28 @@
+﻿<Window x:Class="ZingDownloader.MainWindow"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZingDownloader"
+        mc:Ignorable="d"
+        Title="Zing Downloader" Height="465.789" Width="764.474" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
+        <materialDesign:Card Padding="12" Margin="5,5,5,5" Height="411">
+            <TextBox x:Name="txbInputLink" MouseDoubleClick="txbInputLink_MouseDoubleClick" Background="WhiteSmoke" Foreground="Black" HorizontalAlignment="Center" Height="113" Margin="0,195,0,0" TextWrapping="Wrap" Text="http://mp3.zing.vn/bai-hat/Cam-Nang-Suni-Ha-Linh-RTee/ZW80BZF7.html" VerticalAlignment="Top" Width="709"/>
+        </materialDesign:Card>
+        <TextBlock HorizontalAlignment="Left" Margin="22,201,0,0" TextWrapping="Wrap" Text="Input Link:" VerticalAlignment="Top"/>
+        <Button x:Name="btnDownLoad" Click="btnDownLoad_Click" Content="Download" Margin="310,348,311,50" Height="Auto"></Button>
+        <Image HorizontalAlignment="Left" Height="142" Margin="22,37,0,0" VerticalAlignment="Top" Width="712"/>
+
+
+
+    </Grid>
+</Window>
