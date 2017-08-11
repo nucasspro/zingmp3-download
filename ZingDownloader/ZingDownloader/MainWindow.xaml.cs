@@ -15,7 +15,8 @@ namespace ZingDownloader
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static bool checkidm = false;
+        public static bool checkidm = false;
+        public static string idmpath = "C:\\Program Files (x86)\\Internet Download Manager\\IDMan.exe";
 
         public MainWindow()
         {
@@ -25,7 +26,7 @@ namespace ZingDownloader
 
         #region Event
 
-        private void btnDownLoad_Click(object sender, RoutedEventArgs e)
+        private void BtnDownLoad_Click(object sender, RoutedEventArgs e)
         {
             if (txbInputLink.Text == "")
             {
@@ -33,13 +34,39 @@ namespace ZingDownloader
             }
             else
             {
-                GetSongInfomation(txbInputLink.Text);
+                CreateFolder();
+                string item = CheckInputLink(txbInputLink.Text);
+                switch (item)
+                {
+                    case "video":
+                        {
+                            MessageBox.Show("Chuc nang chua hoan thanh!");
+                            break;
+                        }
+
+                    case "audio":
+                        {
+                            GetASongInfomation(txbInputLink.Text);
+                            break;
+                        }
+
+                    case "playlist":
+                        {
+                            GetPlaylistInformation(txbInputLink.Text);
+                            break;
+                        }
+                }
             }
+            
         }
 
-        private void txbInputLink_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void TxbInputLink_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             txbInputLink.Text = "";
+            if (Clipboard.ContainsText(TextDataFormat.Text))
+            {
+                txbInputLink.Text = Clipboard.GetText(TextDataFormat.Text);
+            }
         }
 
         #endregion Event
@@ -51,7 +78,7 @@ namespace ZingDownloader
             checkidm = CheckIDM();
         }
 
-        private void GetSongInfomation(string URL)
+        private void GetASongInfomation(string URL)
         {
             HttpRequest httpRequest = new HttpRequest();
             string htmlSong = httpRequest.Get(URL).ToString();
@@ -60,26 +87,70 @@ namespace ZingDownloader
             string getJsonFromURLJson = httpRequest.Get(URLJson).ToString();
 
             JObject jobject = JObject.Parse(getJsonFromURLJson);
-            string songname = jobject["data"][0]["name"].ToString().Replace(" ", "-");
-            string artist = jobject["data"][0]["artist"].ToString().Replace(" ", "-");
+            string songname = jobject["data"][0]["name"].ToString().Replace(" ", "_");
+            string artist = jobject["data"][0]["artist"].ToString().Replace(" ", "_");
             string audiolink = jobject["data"][0]["source_list"].ToString();
             audiolink = audiolink.Substring(audiolink.IndexOf("http"), audiolink.IndexOf(",") - audiolink.IndexOf("http") - 1);
-            string fullname = ReplaceUnicode(songname) + "_" + ReplaceUnicode(artist) + ".mp3";
+            string fullname = ReplaceUnicode(songname) + "--" + ReplaceUnicode(artist) + ".mp3";
 
             try
             {
                 if (checkidm == true)
                 {
-                    DownloadWithIDM(audiolink, fullname);
+                    DownloadWithIDM(audiolink, fullname, "song");
                 }
                 else
                 {
                     DownloadWithoutIDM(audiolink, fullname);
+                    MessageBox.Show("Download thanh cong!");
                 }
             }
             catch (Exception Ex)
             {
                 MessageBox.Show(Ex.ToString());
+            }
+        }
+
+        private void GetPlaylistInformation(string URL)
+        {
+            HttpRequest httpRequest = new HttpRequest();
+            string htmlPlaylist = httpRequest.Get(URL).ToString();
+            string pattern = "<div id=\"zplayerjs-wrapper\" class=\"player \" data-xml=\"";
+            int index = htmlPlaylist.IndexOf(pattern);
+            string URLJson = htmlPlaylist.Substring(index, 131).Replace(pattern, "");
+
+            string getJsonFromURLJson = httpRequest.Get(URLJson).ToString();
+
+            int countSong = new Regex(Regex.Escape("name")).Matches(getJsonFromURLJson).Count;
+
+            JObject jobject = JObject.Parse(getJsonFromURLJson);
+            string songname = "";
+            string artist = "";
+            string audiolink = "";
+            string fullname = "";
+            for (int i = 0; i < countSong; i++)
+            {
+                songname = jobject["data"][i]["name"].ToString().Replace(" ", "_");
+                artist = jobject["data"][i]["artist"].ToString().Replace(" ", "_");
+                audiolink = jobject["data"][i]["source_list"].ToString();
+                audiolink = audiolink.Substring(audiolink.IndexOf("http"), audiolink.IndexOf(",") - audiolink.IndexOf("http") - 1);
+                fullname = ReplaceUnicode(songname) + "--" + ReplaceUnicode(artist) + ".mp3";
+                try
+                {
+                    if (checkidm == true)
+                    {
+                        DownloadWithIDM(audiolink, fullname, "playlist");
+                        Process.Start(idmpath, "/s");
+                    }
+                    else
+                    {
+                        DownloadWithoutIDM(audiolink, fullname);
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    MessageBox.Show(Ex.ToString());
+                }
             }
         }
 
@@ -114,15 +185,36 @@ namespace ZingDownloader
             return text;
         }
 
-        private void DownloadWithIDM(string URL, string fullname)
+        private void DownloadWithIDM(string URL, string fullname, string choose)
         {
-            try
+            switch (choose)
             {
-                Process.Start("C:\\Program Files (x86)\\Internet Download Manager\\IDMan.exe", "/n /d " + URL + " /f " + fullname + "");
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Download khong thanh cong!");
+                case "playlist":
+                    {
+                        try
+                        {
+                            //Process.Start(idmpath, "/n /a /s /d " + URL + " /f " + fullname + "");
+                            Process.Start(idmpath, "/n /a /s /d " + URL + " /f " + fullname + " /p "+ AppDomain.CurrentDomain.BaseDirectory + "\\Song" + "");
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Download khong thanh cong!");
+                        }
+                        break;
+                    }
+                case "song":
+                    {
+                        try
+                        {
+                            //Process.Start(idmpath, "/n /d " + URL + " /f " + fullname + "");
+                            Process.Start(idmpath, "/n /d " + URL + " /f " + fullname + " /p " + AppDomain.CurrentDomain.BaseDirectory + "\\Song" + "");
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Download khong thanh cong!");
+                        }
+                        break;
+                    }
             }
         }
 
@@ -131,8 +223,7 @@ namespace ZingDownloader
             try
             {
                 WebClient wc = new WebClient();
-                wc.DownloadFile(URL, AppDomain.CurrentDomain.BaseDirectory + fullname);
-                MessageBox.Show("Download thanh cong!");
+                wc.DownloadFile(URL, AppDomain.CurrentDomain.BaseDirectory + "\\Song" + fullname);
             }
             catch (Exception)
             {
@@ -145,6 +236,23 @@ namespace ZingDownloader
             if (File.Exists("C:\\Program Files (x86)\\Internet Download Manager\\IDMan.exe"))
                 return true;
             return false;
+        }
+
+        private string CheckInputLink(string inputLink)
+        {
+            if (inputLink.IndexOf("bai-hat") > 0)
+                return "audio";
+            if (inputLink.IndexOf("video-clip") > 0)
+                return "video";
+            if (inputLink.IndexOf("album") > 0)
+                return "playlist";
+            return "khong-ton-tai";
+        }
+
+        private bool CreateFolder()
+        {
+            System.IO.Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory+"\\Song");
+            return true;
         }
 
         #endregion Method

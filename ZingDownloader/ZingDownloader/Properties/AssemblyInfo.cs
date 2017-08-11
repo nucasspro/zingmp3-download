@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("ZingDownloader")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("nucasspro")]
 [assembly: AssemblyProduct("ZingDownloader")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
